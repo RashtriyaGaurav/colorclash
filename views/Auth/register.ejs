@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/styleSheets/font.css">
+</head>
+
+<body>
+
+    <div class="flex justify-center items-center w-full h-screen">
+        <div class="w-full max-w-md p-6 ">
+            <h2 class="text-2xl font-bold text-center mb-4">Create your account</h2>
+
+            <form action="/Auth/user/register" method="POST" class="space-y-4">
+
+                <input type="text" name="name" required placeholder="Fullname"
+                    class="w-full p-2 mt-1 bg-gray-300 rounded-md ">
+                <input type="text" name="mobno" required placeholder="Mobile Number"
+                    class="w-full p-2 mt-1 bg-gray-300 rounded-md ">
+                <input type="email" name="email" required placeholder="Email"
+                    class="w-full p-2 mt-1 bg-gray-300 rounded-md ">
+                <input type="password" name="password" required placeholder="Password"
+                    class="w-full p-2 mt-1 bg-gray-300 rounded-md ">
+                <input class="w-full bg-blue-500 text-black py-2 rounded-md" type="submit" value="Create Account">
+                <div>Already have an account? <a href="/Auth/login" class="text-blue-500">login in</a></div>
+
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

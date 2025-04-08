@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/styleSheets/font.css">
+</head>
+
+<body>
+    <div class="flex justify-center items-center w-full h-screen">
+        <div class="w-full max-w-md p-6 ">
+            <h2 class="text-2xl font-bold text-center mb-4">login your account</h2>
+
+            <form action="/Auth/user/login" method="POST" class="space-y-4">
+                <input type="text" name="mobno" required placeholder="Mobile Number"
+                    class="w-full p-2 mt-1 bg-gray-300 text-white rounded-md ">
+                <input type="password" name="password" required placeholder="Password"
+                    class="w-full p-2 mt-1 bg-gray-300 rounded-md ">
+                <input class="w-full bg-blue-500 text-black py-2 rounded-md" type="submit" value="login">
+                <div>Don't have an account? <a href="/Auth/register" class="text-blue-500">register</a></div>
+
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
