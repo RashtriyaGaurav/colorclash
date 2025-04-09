@@ -1,13 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bid2x</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/styleSheets/font.css">
+  <meta charset="UTF-8">
+  <title>Place Your Bid | Premium Sports</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/styleSheets/font.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Boldonse&family=Kanit:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    .color-box {
+      width: 100%;
+      height: 60px;
+      border-radius: 1rem;
+      cursor: pointer;
+      border: 3px solid transparent;
+    }
+
+    .color-box.selected {
+      border-color: #0f172a;
+    }
+  </style>
 </head>
-<body>
-    bid
+
+<body class="text-premium-dark min-h-screen bg-zinc-50">
+
+  <div class="max-w-md mx-auto px-4 pb-24 pt-6">
+
+    <!-- Back Button -->
+    <a href="/" class="flex items-center gap-2 bg-zinc-200 rounded-md px-3 py-2 w-fit hover:bg-zinc-300 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span class="font-bold">Back</span>
+    </a>
+
+    <!-- Select Color -->
+    <h1 class="text-3xl mt-6 mb-2 font-bold">Select Your Bid Color</h1>
+    <div class="grid grid-cols-2 gap-4 bg-zinc-100 p-4 border border-zinc-200 rounded-2xl">
+      <div class="color-box bg-blue-500 flex justify-around items-center" data-color="blue">
+        <h1 class="text-2xl text-center text-white ">1</h1>
+      </div>
+      <div class="color-box bg-red-500 flex justify-around items-center" data-color="red">
+        <h1 class="text-2xl text-center text-white ">2</h1>
+      </div>
+    </div>
+
+    <!-- Bid Input -->
+    <h1 class="text-3xl mt-6 mb-2 font-bold">Enter Bid Amount</h1>
+    <div class="bg-zinc-100 p-4 border -zinc-200 rounded-2xl">
+      <input type="number" id="bidAmount" placeholder="e.g. 500" class="w-full px-4 py-3 rounded-lg border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg mb-4" />
+      <button onclick="submitBid()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Submit Bid</button>
+    </div>
+
+    <!-- Feedback -->
+    <p id="feedback" class="mt-4 text-center text-green-600 hidden">Bid submitted successfully!</p>
+    <p id="error" class="mt-4 text-center text-red-600 hidden">Please select a color and enter a valid amount.</p>
+  </div>
+
+  <script>
+    let selectedColor = null;
+
+    document.querySelectorAll('.color-box').forEach(box => {
+      box.addEventListener('click', () => {
+        document.querySelectorAll('.color-box').forEach(b => b.classList.remove('selected'));
+        box.classList.add('selected');
+        selectedColor = box.getAttribute('data-color');
+      });
+    });
+
+    async function submitBid() {
+      const bidAmount = document.getElementById("bidAmount").value;
+      const feedback = document.getElementById("feedback");
+      const error = document.getElementById("error");
+      feedback.classList.add("hidden");
+      error.classList.add("hidden");
+
+      if (!selectedColor || !bidAmount || bidAmount <= 0) {
+        error.classList.remove("hidden");
+        return;
+      }
+
+      try {
+        const response = await fetch('/bid/submit-bid/<%=user._id%>', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ color: selectedColor, amount: bidAmount })
+        });
+
+        if (response.ok) {
+          feedback.classList.remove("hidden");
+          document.getElementById("bidAmount").value = "";
+          selectedColor = null;
+          document.querySelectorAll('.color-box').forEach(b => b.classList.remove('selected'));
+        } else {
+          error.textContent = "Something went wrong. Try again.";
+          error.classList.remove("hidden");
+        }
+      } catch (err) {
+        error.textContent = "Error submitting bid.";
+        error.classList.remove("hidden");
+      }
+    }
+  </script>
+
 </body>
+
 </html>

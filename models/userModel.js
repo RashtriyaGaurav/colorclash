@@ -6,7 +6,16 @@ const userSchema = mongoose.Schema({
     mobno: Number,
     email: String,
     password: String,
-})
-
+    bids: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'BidCollection2x'
+      }
+    ],
+    isAdmin:{
+      type:Boolean,
+      default:false
+    }
+  });
 const User = mongoose.model('user', userSchema);
 module.exports = User;
