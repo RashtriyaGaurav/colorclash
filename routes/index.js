@@ -5,23 +5,23 @@ const userModel = require('../models/userModel');
 const mongoose = require('mongoose');
 const BidCollection2x = require('../models/bidCollection2x');
 
-router.get('/',isLoggedin,function(req,res){
-    let user = req.user
-    res.render('Main/home',{user});
-})
-
-router.get('/Main/home',isLoggedin,function(req,res){
-    let user = req.user
-    res.render('Main/home',{user});
-})
-
-router.get('/Main/wallet',isLoggedin,function(req,res){
-    res.render('Main/wallet');
-})
-
-router.get('/Main/profile',isLoggedin,function(req,res){
+router.get('/', isLoggedin, function (req, res) {
   let user = req.user
-    res.render('Main/profile',{user});
+  res.render('Main/home', { user });
+})
+
+router.get('/Main/home', isLoggedin, function (req, res) {
+  let user = req.user
+  res.render('Main/home', { user });
+})
+
+router.get('/Main/wallet', isLoggedin, function (req, res) {
+  res.render('Main/wallet');
+})
+
+router.get('/Main/profile', isLoggedin, function (req, res) {
+  let user = req.user
+  res.render('Main/profile', { user });
 })
 
 router.get('/Main/orders', isLoggedin, async function (req, res) {
@@ -33,18 +33,16 @@ router.get('/Main/orders', isLoggedin, async function (req, res) {
     // Fetch all orders matching these IDs
     let userOrder = await BidCollection2x.find({ _id: { $in: orders } });
 
-    console.log("Order IDs:"+ orders);
-    console.log("User Order Details:"+ userOrder);
 
     res.render('Main/orders', { userOrder }); // Send to frontend
   } catch (err) {
-    console.error("Error fetching orders:", err);
+
     res.status(500).send("Something went wrong");
   }
 });
 
-router.get('/bid/bid2x',isLoggedin,function(req,res){
-    res.render('bid/bid2x',{user:req.user});;
+router.get('/bid/bid2x', isLoggedin, function (req, res) {
+  res.render('bid/bid2x', { user: req.user });;
 })
 
 // POST /bid/submit-bid/:userid
@@ -86,8 +84,8 @@ router.post('/bid/submit-bid/:userid', isLoggedin, async (req, res) => {
     res.status(500).json({ error: 'Failed to save bid' });
   }
 });
-  
-  
+
+
 
 
 
