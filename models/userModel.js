@@ -15,6 +15,10 @@ const userSchema = mongoose.Schema({
     isAdmin:{
       type:Boolean,
       default:false
+    },
+    coins:{
+      type:Number,
+      default:0
     }
   });
 const User = mongoose.model('user', userSchema);

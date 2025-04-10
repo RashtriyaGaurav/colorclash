@@ -20,7 +20,8 @@ router.get('/Main/wallet',isLoggedin,function(req,res){
 })
 
 router.get('/Main/profile',isLoggedin,function(req,res){
-    res.render('Main/profile');
+  let user = req.user
+    res.render('Main/profile',{user});
 })
 
 router.get('/Main/orders', isLoggedin, async function (req, res) {
