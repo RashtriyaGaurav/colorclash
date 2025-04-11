@@ -28,7 +28,6 @@ router.get('/Main/orders', isLoggedin, async function (req, res) {
   try {
     let user = req.user;
     let orders = user.bids; // This is an array of ObjectIds or order IDs
-    console.log(orders)
 
     // Fetch all orders matching these IDs
     let userOrder = await BidCollection2x.find({ _id: { $in: orders } });

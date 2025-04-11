@@ -20,7 +20,7 @@
     <%if(userOrder.length > 0){%>
       <% userOrder.forEach(function(order) { %>
         <div
-          class="border border-zinc-200 rounded-2xl bg-white shadow-md mb-5 p-5 transition hover:scale-[1.01] hover:shadow-xl duration-200">
+          class=" rounded-2xl bg-zinc-200/40 mb-5 p-5">
           <div class="mb-2">
             <h1 class="text-2xl font-semibold text-blue-700">Bid Category: 2x Reward</h1>
             <span class="text-md text-zinc-500">
@@ -36,7 +36,7 @@
                 <p class="text-lg text-zinc-800">Color Chosen: <span class="font-semibold text-red-600"> <%= order.color %></span ></p>
                   <%}%>
             <p class="text-lg text-zinc-800">Amount Bid: <span class="text-green-600 font-semibold">
-                <%= order.amount %> Rupees
+              ₹ <%= order.amount %>
               </span></p>
           </div>
 
@@ -74,10 +74,11 @@
           d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
       </svg>
     </a>
-    <a href="/Main/orders" class="text-xl">
-      <span class="material-symbols-outlined">
-        orders
-      </span>
+    <a href="/Main/orders" class=" p-2 rounded-2xl bg-zinc-100/30 text-white">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+      </svg>
+      
     </a>
     <a href="/Main/profile" class="text-xl"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
         stroke-width="1.5" stroke="currentColor" class="size-6">

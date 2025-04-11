@@ -8,28 +8,201 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
   <link rel="stylesheet" href="/styleSheets/font.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=orders" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=orders" />
 </head>
 
 <body class="bg-[#d8e2dc]">
 
   <div class="max-w-md mx-auto pb-20 pt-4 sm:px-6 px-4 bg-[#f8f9fa] min-h-screen ">
-   <div class="flex p-3 gap-2 items-center">
-    <div class="h-24 w-24 bg-blue-700 rounded-full overflow-hidden">
-      <img class="object-cover" src="/images/logo.png" alt="">
+    <div class="flex p-3 gap-2 items-center">
+      <div class="h-24 w-24 bg-blue-700 rounded-full overflow-hidden">
+        <img class="object-cover" src="/images/logo.png" alt="">
+      </div>
+
+      <div class="leading-none">
+        <h1 class="text-2xl font-semibold">
+          <%=user.name%>
+        </h1>
+        <h1 class="text-blue-500 mb-3">
+          <%=user.email%>
+        </h1>
+        <a onclick="openSettings(event)" href="" class="bg-blue-700 rounded-lg  text-white px-3">Edit Profile</a>
+      </div>
     </div>
 
-    <div class="">
-      <h1 class="text-2xl font-semibold"><%=user.name%></h1>
-      <h1 class="text-blue-500"><%=user.email%></h1>
-    </div>
-   </div>
+    <div id="editProfile" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 hidden">
+      <div class="bg-zinc-200 p-6 rounded-xl shadow-lg w-96 relative m-4">
 
-   <div class="h-[60vh] bg-zinc-200 rounded-2xl mt-2"></div>
-   
+        <h2 class="text-xl font-bold flex gap-1 ">
+          Edit Profile
+        </h2>
+
+        <div class=" mt-2 rounded-xl">
+          <form action="/Auth/update/user" method="post">
+            <input type="text" placeholder="Name" class="m-3 p-2 rounded-lg bg-zinc-400" name="name"
+              value="<%=user.name%>">
+            <input type="number" placeholder="Mobile No." class="m-3 p-2 rounded-lg bg-zinc-400" name="mobno"
+              value=<%=user.mobno%>>
+            <input type="email" placeholder="Email" class="m-3 p-2 rounded-lg bg-zinc-400" name="email"
+              value=<%=user.email%>>
+            <input type="submit" value="Update Profile" class="m-3 p-2 rounded-lg bg-blue-600">
+
+          </form>
+        </div>
+
+        <!-- Close Button -->
+        <button onclick="closeSettings()" class="absolute top-2 right-2 text-zinc-600 hover:text-zinc-900 text-2xl">
+          ✖
+        </button>
+      </div>
+
+
+    </div>
+
+    <div class="bg-zinc-200/40 rounded-xl mt-2 p-4 flex justify-between items-center">
+      <div class="ml-3">
+        <h1 class="">Wallet Balance</h1>
+        <h1 class="text-xl font-bold bg-gradient-to-r from-blue-500 to-black text-transparent bg-clip-text">
+          ₹ <%= user.coins %> 
+        </h1>
+      </div>
+      <a href="/addcoin" class="mr-3 bg-gradient-to-r from-blue-500 to-black text-white rounded-xl px-3 py-1">+ Add
+        Coins</a>
+    </div>
+
+    <div class="bg-zinc-200/40 rounded-xl mt-3 p-3">
+
+      <div class=" p-3">
+        <a href="" class="flex justify-between items-center">
+          <div class="flex items-center gap-5">
+            <div class="bg-green-300/50 rounded-full p-2 text-green-600"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            
+            </div>
+            <div class="">
+              <h1 class="text-zinc-900">Wallet</h1>
+              <h2 class="text-zinc-600">View your wallet details</h2>
+            </div>
+          </div>
+
+          <div class=""><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+          </div>
+        </a>
+      </div>
+
+      <hr class=" h-[2px] bg-zinc-400 mx-3">
+
+      <div class=" p-3">
+        <a href="/leaderboard" class="flex justify-between items-center">
+          <div class="flex items-center gap-5">
+            <div class="bg-blue-300/50 rounded-full p-2 text-blue-600"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+          </svg>
+  
+            </div>
+            <div class="">
+              <h1 class="text-zinc-900">Leader Board</h1>
+              <h2 class="text-zinc-600">Explore the Players With Highest Withdrawls</h2>
+            </div>
+          </div>
+  
+          <div class=""><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+          </div>
+        </a>
+      </div>
+
+      <hr class=" h-[2px] bg-zinc-400 mx-3">
+
+      <div class=" p-3">
+        <a href="/Auth/user/logout" class="flex justify-between items-center">
+          <div class="flex items-center gap-5">
+            <div class="bg-red-300 rounded-full p-2 text-red-600"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+            </svg>
+            
+            </div>
+            <div class="">
+              <h1 class="text-zinc-900">Legal</h1>
+              <h2 class="text-zinc-600">Check policies,etc</h2>
+            </div>
+          </div>
+
+          <div class=""><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+          </div>
+        </a>
+      </div>
+
+      <hr class=" h-[2px] bg-zinc-400 mx-3">
+
+
+      <div class=" p-3">
+        <a href="/Auth/user/logout" class="flex justify-between items-center">
+          <div class="flex items-center gap-5">
+            <div class="bg-red-300 rounded-full p-2 text-red-600"><svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+              </svg>
+            </div>
+            <div class="">
+              <h1 class="text-zinc-900">Logout</h1>
+              <h2 class="text-zinc-600">Log out of your account</h2>
+            </div>
+          </div>
+
+          <div class=""><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+          </div>
+        </a>
+      </div>
+
+      
+
+      <%if (user.isAdmin) { %>
+        <hr class=" h-[2px] bg-zinc-400 mx-3">
+        <div class=" p-3">
+          <a href="/Admin" class="flex justify-between items-center">
+            <div class="flex items-center gap-5">
+              <div class="bg-green-300/50 rounded-full p-2 text-green-600"><svg xmlns="http://www.w3.org/2000/svg"
+                  fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+                </svg>
+
+              </div>
+              <div class="">
+                <h1 class="text-zinc-900">Admin Panel</h1>
+                <h2 class="text-zinc-600">Special Access to Authorized users.</h2>
+              </div>
+            </div>
+
+            <div class=""><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+            </div>
+          </a>
+        </div>
+        <%}%>
+    </div>
   </div>
 
- 
+
   <div
     class="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-blue-800 to-black text-white flex justify-around items-center h-14 rounded-t-2xl sm:max-w-md sm:mx-auto">
     <a href="/" class="text-xl">
@@ -46,14 +219,21 @@
       </svg>
     </a>
     <a href="/Main/orders" class="text-xl">
-      <span class="material-symbols-outlined">
-        orders
-      </span>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+      </svg>
+      
     </a>
-    <a href="/Main/profile" class="text-xl"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+    <a href="/Main/profile" class="text-xl bg-zinc-100/30  rounded-2xl p-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
         stroke-width="1.5" stroke="currentColor" class="size-6">
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
       </svg>
     </a>
   </div>
+
+  <script src="/javascript/popup.js"></script>
+
+</body>
+
+</html>

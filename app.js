@@ -16,5 +16,5 @@ app.set('view engine', 'ejs');
 
 app.use('/', index);
 app.use('/Auth', authentication);
-app.use('/admin', adminPanel);
+app.use('/Admin', adminPanel);
 app.listen(3000);
