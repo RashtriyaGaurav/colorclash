@@ -10,35 +10,49 @@ router.get('/', isLoggedin, isAdmin, function (req, res) {
 })
 
 router.get('/Bid2xCollection', isLoggedin, isAdmin, async function (req, res) {
-    try {
-      const collection = await Bid2xCollection.find();
-      
-      const userBidData = [];
-  
-      for (let bid of collection) {
-        const user = await userModel.findById(bid.user); // Assuming `bid.user` is an ObjectId
-  
-        if (user) {
-          userBidData.push({
-            bidId: bid._id,
-            color: bid.color,
-            amount: bid.amount, // If your schema has this
-            userId: user._id,
-            userName: user.name,
-            userEmail: user.email,
-          });
+  try {
+    const collection = await Bid2xCollection.find();
+
+    const redBids = [];
+    const blueBids = [];
+    let redTotal = 0;
+    let blueTotal = 0;
+
+    for (let bid of collection) {
+      const user = await userModel.findById(bid.user); // Assuming bid.user is ObjectId
+
+      if (user) {
+        const bidData = {
+          bidId: bid._id,
+          color: bid.color,
+          amount: bid.amount,
+          createdAt: bid.createdAt,
+          userId: user._id,
+          userName: user.name,
+          userEmail: user.email,
+        };
+
+        if (bid.color === 'red') {
+          redBids.push(bidData);
+          redTotal += bid.amount;
+        } else if (bid.color === 'blue') {
+          blueBids.push(bidData);
+          blueTotal += bid.amount;
         }
       }
-
-      userBidData.forEach()
-  
-      res.render('admin/Bid2xCollection', { collection: userBidData });
-    } catch (err) {
-      console.error('Error:', err);
-      res.status(500).send("Internal Server Error");
     }
-  });
-  
+
+    res.render('admin/Bid2xCollection', {
+      redBids,
+      blueBids,
+      redTotal,
+      blueTotal
+    });
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 
 

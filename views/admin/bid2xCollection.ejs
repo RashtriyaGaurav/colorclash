@@ -14,18 +14,35 @@
 
 <body class="bg-[#d8e2dc]">
 
-    <div class="max-w-md mx-auto pb-20 sm:px-6 px-4 bg-[#f8f9fa] min-h-screen">
+    <div class=" px-4 bg-[#f8f9fa] min-h-screen">
         <h1 class="text-3xl text-zinc-900 font-bold p-4">Bid2x Collection</h1>
 
-        <% collection.forEach(function(user) { %>
-            <div class="bg-white rounded-lg shadow-md p-4 mb-3">
-                <h2 class="text-lg text-zinc-900 font-bold"><%= user.userName %> </h2>
-                <h2 class="text-lg text-zinc-900 font-bold"><%= user.color %> </h2>
-                <h2 class="text-lg text-zinc-900 font-bold"><%= user.amount %> </h2>
-                <h2 class="text-lg text-zinc-900 font-bold"><%= user.userEmail %> </h2>
-
+        <div class="flex gap-5">
+            <div class="text-3xl bg-red-300/70 p-3 w-[45vw] min-h-screen rounded-2xl">
+                <h1 class="bg-red-600 p-5 rounded-2xl mb-5">TOTAL AMOUNT : <%=redTotal%></h1>
+                <% redBids.forEach(function(user) { %>
+                    <div class="bg-trnasparent rounded-lg border p-4 mb-3">
+                        <h2 class="text-lg">Name : <%= user.userName %> </h2>
+                        <h2 class="text-lg">Color : <%= user.color %> </h2>
+                        <h2 class="text-lg">Amount : <%= user.amount %> </h2>
+                        <h2 class="text-lg">Email : <%= user.userEmail %> </h2>
+        
+                    </div>
+                    <%});%>
             </div>
-            <%});%>
+            <div class="text-3xl bg-blue-300/70 p-3 w-[45vw] min-h-screen rounded-2xl">
+                <h1 class="bg-blue-600 p-5 rounded-2xl mb-5">TOTAL AMOUNT : <%=blueTotal%></h1>
+
+                <% blueBids.forEach(function(user) { %>
+                    <div class="bg-trnasparent rounded-lg border p-4 mb-3">
+                        <h2 class="text-lg">Name : <%= user.userName %> </h2>
+                        <h2 class="text-lg">Color : <%= user.color %> </h2>
+                        <h2 class="text-lg">Amount : <%= user.amount %> </h2>
+                        <h2 class="text-lg">Email : <%= user.userEmail %> </h2>
+                    </div>
+                    <%});%>
+            </div>
+        </div>
     </div>
 
 
