@@ -4,7 +4,9 @@ const router = express.Router();
 const userModel = require('../models/userModel');
 const mongoose = require('mongoose');
 const BidCollection2x = require('../models/bidCollection2x');
+const BidCollection2xCopy = require('../models/bidCollection2xCopy');
 const bidResult = require('../models/bidResult');
+const bidCollection2xCopy = require('../models/bidCollection2xCopy');
 
 router.get('/', isLoggedin, function (req, res) {
   let user = req.user
@@ -31,11 +33,11 @@ router.get('/Main/orders', isLoggedin, async function (req, res) {
     let orders = user.bids; // This is an array of ObjectIds or order IDs
 
     // Fetch all orders matching these IDs
-    let userOrder = await BidCollection2x.find({ _id: { $in: orders } });
-    let resultOrder = await bidResult.find();
+    let userOrder = await bidCollection2xCopy.find({ _id: { $in: orders } });
+    // let resultOrder = await bidResult.find();
 
 
-    res.render('Main/orders', { userOrder, userOrderResult }); // Send to frontend
+    res.render('Main/orders', { userOrder}); // Send to frontend
   } catch (err) {
 
     res.status(500).send("Something went wrong");
@@ -82,6 +84,8 @@ router.post('/bid/submit-bid/:userid', isLoggedin, async (req, res) => {
       amount: Number(amount),
       user: user._id
     });
+
+   await bidCollection2xCopy.create(bid);
 
     const savedBid = await bid.save();
 
