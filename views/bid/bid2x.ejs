@@ -50,13 +50,20 @@
     <!-- Bid Input -->
     <h1 class="text-3xl mt-6 mb-2 font-bold">Enter Bid Amount</h1>
     <div class="bg-zinc-100 p-4 border -zinc-200 rounded-2xl">
-      <input type="number" id="bidAmount" placeholder="e.g. 500" class="w-full px-4 py-3 rounded-lg border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg mb-4" />
-      <button onclick="submitBid()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Submit Bid</button>
+      <input type="number" id="bidAmount" placeholder="e.g. 500"
+        class="w-full px-4 py-3 rounded-lg border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg mb-4" />
+      <button onclick="submitBid()"
+        class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Submit
+        Bid</button>
     </div>
 
     <!-- Feedback -->
-    <p id="feedback" class="mt-4 text-center text-green-600 hidden">Bid submitted successfully!</p>
-    <p id="error" class="mt-4 text-center text-red-600 hidden">Please select a color and enter a valid amount.</p>
+
+    <p id="feedback" class=" text-center text-red-600 hidden fixed bottom-20 p-3 rounded-lg  bg-zinc-300">Bid submitted successfully!</p>
+    <h1 id="error" class=" text-center text-red-600 hidden fixed bottom-20 p-3 rounded-lg  bg-zinc-300">Please select a color and
+      enter a valid amount.</h1>
+
+
   </div>
 
   <script>
@@ -78,7 +85,12 @@
       error.classList.add("hidden");
 
       if (!selectedColor || !bidAmount || bidAmount <= 0) {
+        error.textContent = "Please select a color and enter a valid amount.";
         error.classList.remove("hidden");
+
+        setTimeout(() => {
+          error.classList.add("hidden");
+        }, 3000);
         return;
       }
 
@@ -89,21 +101,38 @@
           body: JSON.stringify({ color: selectedColor, amount: bidAmount })
         });
 
+        const result = await response.json();
+
         if (response.ok) {
+          feedback.textContent = result.message || "Bid submitted successfully!";
           feedback.classList.remove("hidden");
+
+          setTimeout(() => {
+            feedback.classList.add("hidden");
+          }, 3000);
+
           document.getElementById("bidAmount").value = "";
           selectedColor = null;
           document.querySelectorAll('.color-box').forEach(b => b.classList.remove('selected'));
         } else {
-          error.textContent = "Something went wrong. Try again.";
+          error.textContent = result.error || "Something went wrong. Try again.";
           error.classList.remove("hidden");
+
+          setTimeout(() => {
+            error.classList.add("hidden");
+          }, 3000);
         }
       } catch (err) {
         error.textContent = "Error submitting bid.";
         error.classList.remove("hidden");
+
+        setTimeout(() => {
+          error.classList.add("hidden");
+        }, 3000);
       }
     }
   </script>
+
 
 </body>
 

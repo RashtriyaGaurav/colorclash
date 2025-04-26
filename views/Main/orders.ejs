@@ -17,41 +17,47 @@
   <div class="max-w-md mx-auto pb-20 pt-6 sm:px-6 px-4 bg-[#f8f9fa] min-h-screen ">
     <h1 class="text-4xl font-bold mb-6">Your Orders</h1>
 
-    <%if(userOrder.length > 0){%>
-      <% userOrder.forEach(function(order) { %>
-        <div
-          class=" rounded-2xl bg-zinc-200/40 mb-5 p-5">
-          <div class="mb-2">
-            <h1 class="text-2xl font-semibold text-blue-700">Bid Category: 2x Reward</h1>
-            <span class="text-md text-zinc-500">
-              <%= order.time.toDateString() %>
-            </span>
-          </div>
+    <% if(userOrder) {%>
+      <%if(userOrder.length> 0){%>
+        <% userOrder.forEach(function(order) { %>
+          <div class=" rounded-2xl bg-zinc-200/40 mb-5 p-5">
+            <div class="mb-2">
+              <h1 class="text-2xl font-semibold text-blue-700">Bid Category: 2x Reward</h1>
+              <span class="text-md text-zinc-500">
+                <%= order.time.toDateString() %>
+              </span>
+            </div>
 
-          <div class="mb-3">
-            
+            <div class="mb-3">
+
               <%if(order.color==='blue'){%>
-                <p class="text-lg text-zinc-800">Color Chosen: <span class="font-semibold text-blue-600"> <%= order.color %></span ></p>
-              <%}else if(order.color==='red'){%>
-                <p class="text-lg text-zinc-800">Color Chosen: <span class="font-semibold text-red-600"> <%= order.color %></span ></p>
+                <p class="text-lg text-zinc-800">Color Chosen: <span class="font-semibold text-blue-600">
+                    <%= order.color %>
+                  </span></p>
+                <%}else if(order.color==='red' ){%>
+                  <p class="text-lg text-zinc-800">Color Chosen: <span class="font-semibold text-red-600">
+                      <%= order.color %>
+                    </span></p>
                   <%}%>
-            <p class="text-lg text-zinc-800">Amount Bid: <span class="text-green-600 font-semibold">
-              ₹ <%= order.amount %>
-              </span></p>
+                    <p class="text-lg text-zinc-800">Amount Bid: <span class="text-green-600 font-semibold">
+                        ₹ <%= order.amount %>
+                      </span></p>
+            </div>
+
+            <div class="border-t pt-2">
+              <p class="text-lg text-zinc-700">
+                Result: Not yet
+              </p>
+            </div>
           </div>
+          <% });%>
+            <% } else { %>
 
-          <div class="border-t pt-2">
-            <p class="text-lg text-zinc-700">
-              Result: 
-              <span class="text-orange-500 font-semibold timer" data-time="<%= order.resultTime %>" data-date="<%= order.time.toISOString() %>">Loading...</span>
-            </p>
-                      </div>
-        </div>
-        <% });%>
-        <% } else { %>
+              <p class="text-lg text-zinc-800 mt-24 ml-5">No orders Yet.</p>
+              <%}%>
+                <%} else {%>
 
-          <p class="text-lg text-zinc-800 mt-24 ml-5">No orders Yet.</p>
-          <%}%>
+                  <%}%>
 
 
 
@@ -75,10 +81,12 @@
       </svg>
     </a>
     <a href="/Main/orders" class=" p-2 rounded-2xl bg-zinc-100/30 text-white">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
       </svg>
-      
+
     </a>
     <a href="/Main/profile" class="text-xl"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
         stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -88,47 +96,8 @@
     </a>
   </div>
 
-  <script>
-    function convertTo24Hour(time12h) {
-      const [time, modifier] = time12h.split(" ");
-      let [hours, minutes] = time.split(":").map(Number);
-  
-      if (modifier === "PM" && hours !== 12) hours += 12;
-      if (modifier === "AM" && hours === 12) hours = 0;
-  
-      return { hours, minutes };
-    }
-  
-    function updateTimers() {
-      document.querySelectorAll('.timer').forEach(span => {
-        const resultTime = span.dataset.time; // e.g., "12:30 PM"
-        const bidDate = new Date(span.dataset.date); // Full bid date
-  
-        const { hours, minutes } = convertTo24Hour(resultTime);
-  
-        const target = new Date(bidDate);
-        target.setHours(hours);
-        target.setMinutes(minutes);
-        target.setSeconds(0);
-  
-        const now = new Date();
-        const diff = target - now;
-  
-        if (diff <= 0) {
-          span.textContent = "Declared";
-        } else {
-          const h = String(Math.floor(diff / (1000 * 60 * 60))).padStart(2, '0');
-          const m = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, '0');
-          const s = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
-          span.textContent = `${h}:${m}:${s}`;
-        }
-      });
-    }
-  
-    updateTimers();
-    setInterval(updateTimers, 1000);
-  </script>
-  
+
+
 </body>
 
 </html>

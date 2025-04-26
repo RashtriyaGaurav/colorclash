@@ -8,7 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
   <link rel="stylesheet" href="/styleSheets/font.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=orders" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=orders" />
 </head>
 
 <body class="bg-[#d8e2dc] text-black">
@@ -63,7 +64,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            01:04:59 remaining
+            <div id="timerDisplay">Loading...</div>
+            <div id="restartMessage"></div>
+
           </div>
         </div>
 
@@ -85,7 +88,7 @@
         </div>
 
         <div class="flex justify-between mt-6">
-          <a href="/bid/bid2x"
+          <a href="/bid/bid2x" id="bidNowBtn"
             class="flex-1 text-center bg-yellow-500 hover:bg-yellow-600 text-premium-dark font-semibold py-2 px-4 rounded-lg mr-2 transition-all">
             Bid Now
           </a>
@@ -189,10 +192,12 @@
       </svg>
     </a>
     <a href="/Main/orders" class="text-xl">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
       </svg>
-      
+
     </a>
     <a href="/Main/profile" class="text-xl"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
         stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -201,6 +206,70 @@
       </svg>
     </a>
   </div>
+
+
+  <script>
+    // Function to update the timer display
+    function updateTimer(remainingTime) {
+      const minutes = Math.floor(remainingTime / 60000).toString().padStart(2, '0');
+      const seconds = Math.floor((remainingTime % 60000) / 1000).toString().padStart(2, '0');
+      document.getElementById("timerDisplay").textContent = `Time left: ${minutes}:${seconds}`;
+
+      // Disable "Bid Now" button if only 1 minute or less is left
+      const bidNowBtn = document.getElementById("bidNowBtn");
+      if (bidNowBtn) {
+        if (remainingTime <= 60000) { // If 1 minute or less is left
+          bidNowBtn.style.pointerEvents = "none";  // Prevent clicking
+          bidNowBtn.style.opacity = "0.5";         // Make it look disabled
+          bidNowBtn.textContent = "Bid Closed"; // Change text
+        } else {
+          bidNowBtn.style.pointerEvents = "auto"; // Re-enable clicking
+          bidNowBtn.style.opacity = "1";         // Restore normal opacity
+          bidNowBtn.textContent = "Bid Now";      // Restore text
+        }
+      }
+
+
+      if (remainingTime <= 0) {
+        timerExpired(); // Trigger when timer expires
+      }
+    }
+
+    // Function that is called when the timer expires
+    function timerExpired() {
+
+      console.log("Timer expired! Triggering action...");
+ document.getElementById('timerDisplay').textContent = "";
+      // Show message: Timer will restart in 5 seconds
+      document.getElementById('restartMessage').textContent = "Next bid in 5 seconds...";
+
+      // After 5 seconds, reset the timer
+      setTimeout(() => {
+        document.getElementById('restartMessage').textContent = "";
+        fetchRemainingTime();  // Re-fetch remaining time to start the next cycle
+      }, 5000); // 5-second delay before restart
+    }
+
+    // Fetch the remaining time from the server
+    function fetchRemainingTime() {
+      fetch('/get-remaining-time')
+        .then(response => response.json())
+        .then(data => {
+          const remainingTime = data.remainingTime;
+          updateTimer(remainingTime); // Update the timer display
+
+          // Periodically fetch the time to keep the timer up to date
+          setTimeout(fetchRemainingTime, 1000); // Re-fetch every second
+        })
+        .catch(err => console.error("Error fetching remaining time:", err));
+    }
+
+    // Start fetching the timer state from the server when the page loads
+    window.onload = fetchRemainingTime;
+  </script>
+
+
+
 
 </body>
 
