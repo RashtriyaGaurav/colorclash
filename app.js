@@ -113,7 +113,8 @@ function getRemainingTime() {
 
 // Function to reset the timer
 function resetTimer() {
-    timerStartTime = Date.now();
+    let timerStartTime = moment.tz("Asia/Kolkata").valueOf();
+
     console.log("Timer has been reset.");
 }
 
@@ -146,10 +147,12 @@ function startTimerLoop() {
 startTimerLoop();
 
 // Route to get the remaining time of the timer
-app.get('/get-remaining-time', (req, res) => {
-    const remainingTime = getRemainingTime();
-    res.json({ remainingTime });
-});
+function getRemainingTime() {
+    const now = moment.tz("Asia/Kolkata").valueOf();
+    const remainingTime = Math.max(0, timerStartTime + timerDuration - now);
+    return remainingTime;
+}
+
 
 // Route to fetch the result data after the timer expires (for logging/other purposes)
 
