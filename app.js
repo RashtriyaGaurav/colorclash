@@ -1,13 +1,16 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv').config();
+const { isLoggedin } = require('./middlewares/isLoggedin');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const index = require('./routes/index')
 const authentication = require('./routes/auth')
 const adminPanel = require('./routes/admin');
 const Bid = require('./models/bidCollection2x');
+const BidCollection2xCopy = require('./models/bidCollection2xCopy');
 const bidResult = require('./models/bidResult');
+const userModel = require('./models/userModel');
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -16,19 +19,40 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
+
+app.get('/bid/winner', isLoggedin, async function (req, res) {
+    const winnerusers = [];
+
+    const winner = await bidResult.find();
+
+    for (const result of winner) {
+        for (const userId of result.winnerUsers) {
+            const userDetails = await userModel.findById(userId);
+            if (userDetails) {
+                winnerusers.push(userDetails);
+            }
+        }
+    }
+
+    res.render('main/winners', { winnerusers });
+});
+
+
 // Timer Variables
 let timerStartTime = Date.now(); // Timer start time (in milliseconds)
-const timerDuration = 10 * 60 * 1000; // 10 minutes in milliseconds (can adjust as needed)
+const timerDuration = 3 * 60 * 1000; // 10 minutes in milliseconds (can adjust as needed)
 let timerInterval; // Interval for checking the timer
 
 async function calculateResult() {
     try {
-        // Fetch all bids placed before now
+        // Fetch all bids
         const bids = await Bid.find();
-        console.log(bids)
+        // console.log(bids);
+
         let redTotal = 0;
         let blueTotal = 0;
 
+        // Calculate totals
         bids.forEach(bid => {
             if (bid.color === 'red') {
                 redTotal += bid.amount;
@@ -39,20 +63,41 @@ async function calculateResult() {
 
         const WinnerColor = redTotal < blueTotal ? 'red' : 'blue';
 
+        const winnerUsers = [];
+
+        // Update each bid with result
+        for (const bid of bids) {
+            const resultStatus = bid.color === WinnerColor ? "You Won" : "Lossed";
+
+            // Update in DB
+            await BidCollection2xCopy.findByIdAndUpdate(bid._id, { result: resultStatus });
+
+            if (resultStatus === "You Won") {
+                winnerUsers.push(bid.user);
+            }
+        }
+
+        // Save final result
         await bidResult.create({
             redTotal,
             blueTotal,
             WinnerColor,
-            bidUsers:bids
-        })
+            bidUsers: bids,           // original bids without modified result (optional)
+            winnerUsers: winnerUsers  // list of winning user IDs
+        });
 
-        // ✅ Optional: After result, you can clear all bids for next round
+        // Optionally clear all bids after result if you want a fresh round
         await Bid.deleteMany({});
+
     } catch (error) {
         console.error('Error calculating result:', error);
         return null;
     }
 }
+
+
+
+
 
 
 
