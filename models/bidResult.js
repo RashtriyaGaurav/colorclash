@@ -6,6 +6,7 @@ const bidResultSchema = new mongoose.Schema({
   blueTotal:String,
   WinnerColor:String,
   bidUsers:Array,
+  winnerUsers:Array
 });
 
 module.exports = mongoose.model('BidResult2x', bidResultSchema);

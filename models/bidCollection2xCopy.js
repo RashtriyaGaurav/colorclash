@@ -22,9 +22,9 @@ const bidSchema = new mongoose.Schema({
     default: Date.now
   },
   // ✅ Recommended resultTime as a Date
-  resultTime: {
+  result: {
     type:String,
-    default: '07:00 PM'
+    default: 'Not Declared'
   }
 
 });

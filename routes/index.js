@@ -36,17 +36,32 @@ router.get('/Main/orders', isLoggedin, async function (req, res) {
     let userOrder = await bidCollection2xCopy.find({ _id: { $in: orders } });
     // let resultOrder = await bidResult.find();
 
+    let lossedTotal = 0;
+    let wonTotal = 0;
 
-    res.render('Main/orders', { userOrder}); // Send to frontend
+    userOrder.forEach(bid => {
+      if (bid.result === 'Lossed') {
+        lossedTotal += bid.amount;
+      } else if (bid.color === 'blue') {
+        wonTotal += bid.amount;
+      }
+    });
+
+    // console.log("Total Loss" + lossedTotal)
+    // console.log("Total Won" + wonTotal)
+
+    res.render('Main/orders', { userOrder , wonTotal }); // Send to frontend
   } catch (err) {
 
     res.status(500).send("Something went wrong");
+    console.log(err)
   }
 });
 
 router.get('/bid/bid2x', isLoggedin, function (req, res) {
   res.render('bid/bid2x', { user: req.user });;
 })
+
 
 // POST /bid/submit-bid/:userid
 router.post('/bid/submit-bid/:userid', isLoggedin, async (req, res) => {
@@ -85,7 +100,7 @@ router.post('/bid/submit-bid/:userid', isLoggedin, async (req, res) => {
       user: user._id
     });
 
-   await bidCollection2xCopy.create(bid);
+    await bidCollection2xCopy.create(bid);
 
     const savedBid = await bid.save();
 
