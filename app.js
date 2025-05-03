@@ -11,6 +11,9 @@ const Bid = require('./models/bidCollection2x');
 const BidCollection2xCopy = require('./models/bidCollection2xCopy');
 const bidResult = require('./models/bidResult');
 const userModel = require('./models/userModel');
+const moment = require('moment-timezone');
+const indiaTime = moment().tz("Asia/Kolkata").toDate();
+
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -39,7 +42,7 @@ app.get('/bid/winner', isLoggedin, async function (req, res) {
 
 
 // Timer Variables
-let timerStartTime = Date.now(); // Timer start time (in milliseconds)
+let timerStartTime = moment.tz("Asia/Kolkata").valueOf(); // Gets IST timestamp in milliseconds
 const timerDuration = 3 * 60 * 1000; // 10 minutes in milliseconds (can adjust as needed)
 let timerInterval; // Interval for checking the timer
 
