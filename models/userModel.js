@@ -19,7 +19,8 @@ const userSchema = mongoose.Schema({
     coins:{
       type:Number,
       default:0
-    }
+    },
+    transactions:[]
   });
 const User = mongoose.model('user', userSchema);
 module.exports = User;

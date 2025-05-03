@@ -47,7 +47,6 @@ async function calculateResult() {
     try {
         // Fetch all bids
         const bids = await Bid.find();
-        // console.log(bids);
 
         let redTotal = 0;
         let blueTotal = 0;
@@ -62,38 +61,54 @@ async function calculateResult() {
         });
 
         const WinnerColor = redTotal < blueTotal ? 'red' : 'blue';
-
         const winnerUsers = [];
 
         // Update each bid with result
         for (const bid of bids) {
             const resultStatus = bid.color === WinnerColor ? "You Won" : "Lossed";
 
-            // Update in DB
+            // Save result status
             await BidCollection2xCopy.findByIdAndUpdate(bid._id, { result: resultStatus });
 
+            // If the user won
             if (resultStatus === "You Won") {
                 winnerUsers.push(bid.user);
+
+                // Add double the amount to user's wallet
+                const user = await userModel.findById(bid.user);
+                if (user) {
+                    user.coins = (user.coins || 0) + (bid.amount * 2);
+                
+                    user.transactions.push({
+                        description: "Winning : Bid2x",
+                        amount: bid.amount * 2,
+                        date: new Date() // More readable and useful for display
+                    });
+                
+                    await user.save();
+                }
+                
             }
         }
 
-        // Save final result
+        // Save the final result
         await bidResult.create({
             redTotal,
             blueTotal,
             WinnerColor,
-            bidUsers: bids,           // original bids without modified result (optional)
-            winnerUsers: winnerUsers  // list of winning user IDs
+            bidUsers: bids,
+            winnerUsers: winnerUsers
         });
 
-        // Optionally clear all bids after result if you want a fresh round
-        await Bid.deleteMany({});
+        // Clear all bids
+        await Bid.deleteMany();
 
     } catch (error) {
         console.error('Error calculating result:', error);
         return null;
     }
 }
+
 
 
 

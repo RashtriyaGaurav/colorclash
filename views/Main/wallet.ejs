@@ -9,37 +9,72 @@
     <link rel="stylesheet" href="/styleSheets/font.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=orders" />
 </head>
-<body>
+<body class="bg-[#d8e2dc] text-black">
+    
+  <div class="max-w-md mx-auto pb-20 sm:px-6 px-4 bg-[#f8f9fa] ">
+    
+    <h1 class="text-4xl font-bold pt-3"> </h1>
+
+    <!-- Back Button -->
+    <a href="/" class="flex items-center gap-2 bg-zinc-200 rounded-md px-3 py-2 w-fit hover:bg-zinc-300 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span class="font-bold">Back</span>
+    </a>
+
+    <h1 class="text-4xl font-bold mb-6 pt-3">Wallet Details</h1>
+
+    <div class="bg-zinc-200/40 rounded-xl mt-2 p-4 flex justify-between items-center">
+      <div class="ml-3">
+        <h1 class="">Wallet Balance</h1>
+        <h1 class="text-xl font-bold bg-gradient-to-r from-blue-500 to-black text-transparent bg-clip-text">
+          ₹ <%= user.coins %> 
+        </h1>
+      </div>
+      <a href="/addcoin" class="mr-3 bg-gradient-to-r from-blue-500 to-black text-white rounded-md px-3 py-1">WITHDRAW</a>
+    </div>
+
+    <div class="flex mt-3">
+      <a class="text-xl w-full text-center bg-gradient-to-r from-blue-500 text-white to-black rounded-xl py-3 px-4" href="">+ Add
+        Coins</a>
+      <!-- <a class="text-xl bg-gradient-to-r from-blue-500 text-white to-black rounded-lg py-1 px-4" href="">Add money</a> -->
+    </div>
+
+    <div class="bg-zinc-200/40 rounded-xl mt-3 min-h-screen">
+      <h1 class="text-2xl font-semibold px-4 pt-4">Transaction history</h1>
+    
+      <% user.transactions.slice().reverse().forEach(function(Details){ %>
+        <%let sign = '' %>
+        <%let color = '' %>
+        <% if(Details.description === 'Winning : Bid2x') {sign = '+' , color = 'text-green-500'}%>
+        <% if(Details.description === 'Joining fee : Bid2x') {sign = '-' , color = 'text-red-500'}%>
+        
+        <div class="bg-white shadow-md rounded-lg p-4 flex items-center justify-between m-3">
+          <div>
+            <h1 class="font-semibold text-lg leading-none"><%= Details.description %></h1>
+            <p class="text-md text-gray-500">
+              <%
+              const date = new Date(Details.date);
+              const day = String(date.getDate()).padStart(2, '0');
+              const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+              const year = String(date.getFullYear()).slice(-2);
+            %>
+            
+            <%= `${day}/${month}/${year}` %>
+            <!-- <%= new Date(Details.date).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) %> -->
+            
+            </p>
+          </div>
+          <div class="<%= color %> text-xl font-bold"> <%=sign%> <%= Details.amount %></div>
+        </div>
+     <%})%>
+
+    </div>
     
 
-    <div
-    class="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-blue-800 to-black text-white flex justify-around items-center h-14 rounded-t-2xl sm:max-w-md sm:mx-auto">
-    <a href="/" class="text-xl">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-        class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-      </svg>
-    </a>
-    <a href="/Main/wallet" class="text-xl bg-zinc-100/30  rounded-2xl p-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-        stroke-width="1.5" stroke="currentColor" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
-      </svg>
-    </a>
-    <a href="/Main/orders" class="text-xl">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
-      </svg>
-      
-    </a>
-    <a href="/Main/profile" class="text-xl"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-        stroke-width="1.5" stroke="currentColor" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-      </svg>
-    </a>
   </div>
+   
 </body>
 </html>
 

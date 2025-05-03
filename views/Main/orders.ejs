@@ -76,6 +76,9 @@
                                 <% } else if(order.result==="You Won" ) { %>
                                   <h1 class="text-green-600 text-xl">Result:<%= order.result %>
                                   </h1>
+
+                                  <h1 class="text-green-600 text-xl">₹<%= order.amount %> credited to your wallet
+                                  </h1>
                                   <% } else { %>
                                     <h1 class=" text-xl">Result:<%= order.result %>
                                     </h1>

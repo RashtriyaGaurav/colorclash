@@ -19,7 +19,7 @@ router.get('/Main/home', isLoggedin, function (req, res) {
 })
 
 router.get('/Main/wallet', isLoggedin, function (req, res) {
-  res.render('Main/wallet');
+  res.render('Main/wallet',{user:req.user});
 })
 
 router.get('/Main/profile', isLoggedin, function (req, res) {
@@ -91,6 +91,11 @@ router.post('/bid/submit-bid/:userid', isLoggedin, async (req, res) => {
 
     // Deduct coins
     user.coins -= Number(amount);
+    user.transactions.push({
+      description: "Joining fee : Bid2x",
+      amount:amount,
+      date: new Date() // More readable and useful for display
+  });
     await user.save();
 
     // Create and save the bid
